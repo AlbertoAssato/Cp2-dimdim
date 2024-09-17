@@ -33,18 +33,24 @@ A API oferece endpoints para gerenciar recursos, com operações básicas de CRU
 - **PUT**: Atualiza um item existente.
 - **DELETE**: Remove um item.
 
-### Exemplos de endpoints:
+### Exemplos de endpoints para testes:
 
 - `GET /api/usuarios`
 - `POST /api/usuarios`
 - `PUT /api/usuarios/{id}`
 - `DELETE /api/usuarios/{id}`
 
-## Documentação da API
+- `GET /api/carteirinhas`
+- `POST /api/carteirinhas`
+- `PUT /api/carteirinhas/{id}`
+- `DELETE /api/carteirinhas/{id}`
+
+## Documentação da API e deploy/teste em nuvem
 
 A API é documentada com Swagger/OpenAPI, permitindo que os desenvolvedores explorem e testem os endpoints diretamente pela interface do Swagger. A documentação inclui descrições detalhadas dos endpoints e dos modelos de dados utilizados, facilitando o entendimento e a integração.
 
-Para acessar a documentação, navegue até `https://localhost:7148/swagger/index.html`.
+Para acessar a documentação, navegue até `https://localhost:7148/swagger/index.html`. 
+Para testar em nuvem utilize a url `caremi-dotnet-api.azurewebsites.net`
 
 ## Como executar a API
 
@@ -57,7 +63,7 @@ Para acessar a documentação, navegue até `https://localhost:7148/swagger/inde
 
 1. Clone o repositório:
    ```bash
-   git clone https://github.com/Miguel-Fr3/CareMiAPI
+   git clone https://github.com/nicollyADS/dotnet-devops
 
 2. Configure as variáveis de ambiente com as credenciais de acesso ao banco Oracle:
 
@@ -76,3 +82,5 @@ Para acessar a documentação, navegue até `https://localhost:7148/swagger/inde
 - rm99997 - Miguel Fernandes
 - rm552579 - Nicolly de Almeida Gonçalves
 - rm551521 - Patrick Jaguski
+
+
