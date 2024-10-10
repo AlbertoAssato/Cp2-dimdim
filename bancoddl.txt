@@ -1,0 +1,411 @@
+-- Remoção das Tabelas
+DROP TABLE IF EXISTS t_cm_agendamento_exame;
+DROP TABLE IF EXISTS t_cm_carteirinha;
+DROP TABLE IF EXISTS t_cm_exame;
+DROP TABLE IF EXISTS t_cm_login;
+DROP TABLE IF EXISTS t_cm_medico;
+DROP TABLE IF EXISTS t_cm_paciente;
+DROP TABLE IF EXISTS t_cm_paciente_plano_saude;
+DROP TABLE IF EXISTS t_cm_plano_saude;
+DROP TABLE IF EXISTS t_cm_resultado_exame;
+DROP TABLE IF EXISTS t_cm_usuario;
+
+----------------------------------------------------------------------------------------------------------------
+
+
+-- Criação das tabelas
+
+CREATE TABLE t_cm_agendamento_exame 
+(
+    CdAgendamento INT IDENTITY(1,1) PRIMARY KEY, 
+    NrCPF BIGINT, 
+    NrRG BIGINT, 
+    DsNome NVARCHAR(100), 
+    DsObservacao NVARCHAR(250), 
+    DtAgendamento DATE, 
+    DtEnvio DATE, 
+    MedicoId INT, 
+    PacienteId INT
+);
+
+CREATE TABLE t_cm_carteirinha 
+(
+    CdCarteirinha INT IDENTITY(1,1) PRIMARY KEY, 
+    NmPaciente NVARCHAR(100), 
+    NmPlanoSaude NVARCHAR(100), 
+    NrCns BIGINT, 
+    NmEmpresa NVARCHAR(100), 
+    DsCarencia NVARCHAR(200), 
+    DsAcomodacao NVARCHAR(200), 
+    DtNascimento DATE, 
+    PacienteId INT
+);
+
+CREATE TABLE t_cm_exame 
+(
+    CdExame INT IDENTITY(1,1) PRIMARY KEY, 
+    DtExame DATE, 
+    DsExame NVARCHAR(50), 
+    AgendamentoExameId INT
+);
+
+CREATE TABLE t_cm_login 
+(
+    CdLogin INT IDENTITY(1,1) PRIMARY KEY, 
+    NrCpf NVARCHAR(15), 
+    DsSenha NVARCHAR(100), 
+    FgAtivo BIT, 
+    UsuarioId INT
+);
+
+CREATE TABLE t_cm_medico 
+(
+    CdMedico INT IDENTITY(1,1) PRIMARY KEY, 
+    NmMedico NVARCHAR(100), 
+    DsEspecializacao NVARCHAR(200), 
+    DsCrm NVARCHAR(15), 
+    DsEmail NVARCHAR(100), 
+    NrCelular NVARCHAR(15)
+);
+
+CREATE TABLE t_cm_paciente 
+(
+    CdPaciente INT IDENTITY(1,1) PRIMARY KEY, 
+    NmPaciente NVARCHAR(100), 
+    NrPeso DECIMAL(6,2), 
+    NrAltura DECIMAL(4,2), 
+    NmGrupoSanguineo NVARCHAR(6), 
+    FlSexoBiologico CHAR(1), 
+    UsuarioId INT
+);
+
+CREATE TABLE t_cm_paciente_plano_saude 
+(
+    PlanoSaudeId INT, 
+    PacienteId INT, 
+    CdPlanoPaciente INT IDENTITY(1,1) PRIMARY KEY, 
+    NrCarteira BIGINT, 
+    DtInicio DATE, 
+    DtFim DATE
+);
+
+CREATE TABLE t_cm_plano_saude 
+(
+    CdPlanoSaude INT IDENTITY(1,1) PRIMARY KEY, 
+    DsRazaoSocial NVARCHAR(100), 
+    NmFantasia NVARCHAR(100), 
+    NrCnpj BIGINT, 
+    NmContato NVARCHAR(100), 
+    NrTelefone NVARCHAR(8), 
+    DtCadastro DATE, 
+    FgAtivo BIT
+);
+
+CREATE TABLE t_cm_resultado_exame 
+(
+    CdResultado INT IDENTITY(1,1) PRIMARY KEY, 
+    DsResultado NVARCHAR(500), 
+    DsObservacoes NVARCHAR(100), 
+    VrResultado DECIMAL(5,2), 
+    NrGlobulosVermelhos INT, 
+    NrGlobulosBrancos INT, 
+    NrPlaquetas INT, 
+    NrHemoglobinaGlicada DECIMAL(5,2), 
+    NrCreatinina DECIMAL(5,2), 
+    NrColesterolTotal DECIMAL(5,2), 
+    NrColesterolHDL DECIMAL(5,2), 
+    NrColesterolLDL DECIMAL(5,2), 
+    NrTriglicerides DECIMAL(5,2), 
+    NrHormônioTireostimulanteTSH DECIMAL(5,2), 
+    TExameId INT
+);
+
+CREATE TABLE t_cm_usuario 
+(
+    CdUsuario INT IDENTITY(1,1) PRIMARY KEY, 
+    NmUsuario NVARCHAR(20), 
+    DtNascimento DATE, 
+    NrCpf NVARCHAR(15), 
+    NrRg NVARCHAR(15), 
+    DsNacionalidade NVARCHAR(50), 
+    NrTelefone NVARCHAR(15), 
+    DtCadastro DATE, 
+    DsEstadoCivil NVARCHAR(100), 
+    DsProfissao NVARCHAR(100), 
+    FgAtivo BIT
+);
+
+-- Criação dos índices
+
+CREATE UNIQUE INDEX IX_t_cm_agendamento_exame ON t_cm_agendamento_exame (CdAgendamento);
+CREATE INDEX IX_t_cm_agendamento_exame_MedicoId ON t_cm_agendamento_exame (MedicoId);
+CREATE INDEX IX_t_cm_agendamento_exame_PacienteId ON t_cm_agendamento_exame (PacienteId);
+
+CREATE UNIQUE INDEX IX_t_cm_carteirinha ON t_cm_carteirinha (CdCarteirinha);
+CREATE INDEX IX_t_cm_carteirinha_PacienteId ON t_cm_carteirinha (PacienteId);
+
+CREATE UNIQUE INDEX IX_t_cm_exame ON t_cm_exame (CdExame);
+CREATE INDEX IX_t_cm_exame_AgendamentoExameId ON t_cm_exame (AgendamentoExameId);
+
+CREATE UNIQUE INDEX IX_t_cm_login ON t_cm_login (CdLogin);
+CREATE INDEX IX_t_cm_login_UsuarioId ON t_cm_login (UsuarioId);
+
+CREATE UNIQUE INDEX IX_t_cm_medico ON t_cm_medico (CdMedico);
+
+CREATE UNIQUE INDEX IX_t_cm_paciente ON t_cm_paciente (CdPaciente);
+CREATE INDEX IX_t_cm_paciente_UsuarioId ON t_cm_paciente (UsuarioId);
+
+CREATE UNIQUE INDEX IX_t_cm_paciente_plano_saude ON t_cm_paciente_plano_saude (CdPlanoPaciente);
+CREATE INDEX IX_t_cm_paciente_plano_saude_PacienteId ON t_cm_paciente_plano_saude (PacienteId);
+CREATE INDEX IX_t_cm_paciente_plano_saude_PlanoSaudeId ON t_cm_paciente_plano_saude (PlanoSaudeId);
+
+CREATE UNIQUE INDEX IX_t_cm_plano_saude ON t_cm_plano_saude (CdPlanoSaude);
+
+CREATE UNIQUE INDEX IX_t_cm_resultado_exame ON t_cm_resultado_exame (CdResultado);
+CREATE INDEX IX_t_cm_resultado_exame_TExameId ON t_cm_resultado_exame (TExameId);
+
+CREATE UNIQUE INDEX IX_t_cm_usuario ON t_cm_usuario (CdUsuario);
+
+--------------------------------------------------------
+--  Constraints for Table t_cm_agendamento_exame
+--------------------------------------------------------
+
+ALTER TABLE [dbo].[t_cm_agendamento_exame] 
+    ADD CONSTRAINT [PK_t_cm_agendamento_exame] PRIMARY KEY CLUSTERED ([CdAgendamento]);
+
+ALTER TABLE [dbo].[t_cm_agendamento_exame] 
+    ALTER COLUMN [CdAgendamento] INT NOT NULL;
+ALTER TABLE [dbo].[t_cm_agendamento_exame] 
+    ALTER COLUMN [NrCPF] VARCHAR(14) NOT NULL;
+ALTER TABLE [dbo].[t_cm_agendamento_exame] 
+    ALTER COLUMN [NrRG] VARCHAR(12) NOT NULL;
+ALTER TABLE [dbo].[t_cm_agendamento_exame] 
+    ALTER COLUMN [DsNome] NVARCHAR(100) NOT NULL;
+ALTER TABLE [dbo].[t_cm_agendamento_exame] 
+    ALTER COLUMN [DsObservacao] NVARCHAR(255) NOT NULL;
+ALTER TABLE [dbo].[t_cm_agendamento_exame] 
+    ALTER COLUMN [DtAgendamento] DATE NOT NULL;
+ALTER TABLE [dbo].[t_cm_agendamento_exame] 
+    ALTER COLUMN [DtEnvio] DATE NOT NULL;
+ALTER TABLE [dbo].[t_cm_agendamento_exame] 
+    ALTER COLUMN [MedicoId] INT NOT NULL;
+
+--------------------------------------------------------
+--  Constraints for Table t_cm_carteirinha
+--------------------------------------------------------
+
+ALTER TABLE [dbo].[t_cm_carteirinha] 
+    ADD CONSTRAINT [PK_t_cm_carteirinha] PRIMARY KEY CLUSTERED ([CdCarteirinha]);
+
+ALTER TABLE [dbo].[t_cm_carteirinha] 
+    ALTER COLUMN [CdCarteirinha] INT NOT NULL;
+ALTER TABLE [dbo].[t_cm_carteirinha] 
+    ALTER COLUMN [NmPaciente] NVARCHAR(100) NOT NULL;
+ALTER TABLE [dbo].[t_cm_carteirinha] 
+    ALTER COLUMN [NmPlanoSaude] NVARCHAR(100) NOT NULL;
+ALTER TABLE [dbo].[t_cm_carteirinha] 
+    ALTER COLUMN [NrCns] VARCHAR(15) NOT NULL;
+ALTER TABLE [dbo].[t_cm_carteirinha] 
+    ALTER COLUMN [NmEmpresa] NVARCHAR(100) NOT NULL;
+ALTER TABLE [dbo].[t_cm_carteirinha] 
+    ALTER COLUMN [DsCarencia] NVARCHAR(50) NOT NULL;
+ALTER TABLE [dbo].[t_cm_carteirinha] 
+    ALTER COLUMN [DsAcomodacao] NVARCHAR(50) NOT NULL;
+ALTER TABLE [dbo].[t_cm_carteirinha] 
+    ALTER COLUMN [DtNascimento] DATE NOT NULL;
+
+--------------------------------------------------------
+--  Constraints for Table t_cm_exame
+--------------------------------------------------------
+
+ALTER TABLE [dbo].[t_cm_exame] 
+    ADD CONSTRAINT [PK_t_cm_exame] PRIMARY KEY CLUSTERED ([CdExame]);
+
+ALTER TABLE [dbo].[t_cm_exame] 
+    ALTER COLUMN [CdExame] INT NOT NULL;
+ALTER TABLE [dbo].[t_cm_exame] 
+    ALTER COLUMN [DtExame] DATE NOT NULL;
+ALTER TABLE [dbo].[t_cm_exame] 
+    ALTER COLUMN [DsExame] NVARCHAR(100) NOT NULL;
+
+--------------------------------------------------------
+--  Constraints for Table t_cm_login
+--------------------------------------------------------
+
+ALTER TABLE [dbo].[t_cm_login] 
+    ADD CONSTRAINT [PK_t_cm_login] PRIMARY KEY CLUSTERED ([CdLogin]);
+
+ALTER TABLE [dbo].[t_cm_login] 
+    ALTER COLUMN [CdLogin] INT NOT NULL;
+ALTER TABLE [dbo].[t_cm_login] 
+    ALTER COLUMN [NrCpf] VARCHAR(14) NOT NULL;
+ALTER TABLE [dbo].[t_cm_login] 
+    ALTER COLUMN [DsSenha] NVARCHAR(100) NOT NULL;
+ALTER TABLE [dbo].[t_cm_login] 
+    ALTER COLUMN [FgAtivo] BIT NOT NULL;
+ALTER TABLE [dbo].[t_cm_login] 
+    ALTER COLUMN [UsuarioId] INT NOT NULL;
+
+--------------------------------------------------------
+--  Constraints for Table t_cm_medico
+--------------------------------------------------------
+
+ALTER TABLE [dbo].[t_cm_medico] 
+    ADD CONSTRAINT [PK_t_cm_medico] PRIMARY KEY CLUSTERED ([CdMedico]);
+
+ALTER TABLE [dbo].[t_cm_medico] 
+    ALTER COLUMN [CdMedico] INT NOT NULL;
+ALTER TABLE [dbo].[t_cm_medico] 
+    ALTER COLUMN [NmMedico] NVARCHAR(100) NOT NULL;
+ALTER TABLE [dbo].[t_cm_medico] 
+    ALTER COLUMN [DsEspecializacao] NVARCHAR(100) NOT NULL;
+ALTER TABLE [dbo].[t_cm_medico] 
+    ALTER COLUMN [DsCrm] NVARCHAR(20) NOT NULL;
+ALTER TABLE [dbo].[t_cm_medico] 
+    ALTER COLUMN [DsEmail] NVARCHAR(100) NOT NULL;
+ALTER TABLE [dbo].[t_cm_medico] 
+    ALTER COLUMN [NrCelular] VARCHAR(15) NOT NULL;
+
+--------------------------------------------------------
+--  Constraints for Table t_cm_paciente
+--------------------------------------------------------
+
+ALTER TABLE [dbo].[t_cm_paciente] 
+    ADD CONSTRAINT [PK_t_cm_paciente] PRIMARY KEY CLUSTERED ([CdPaciente]);
+
+ALTER TABLE [dbo].[t_cm_paciente] 
+    ALTER COLUMN [CdPaciente] INT NOT NULL;
+ALTER TABLE [dbo].[t_cm_paciente] 
+    ALTER COLUMN [NmPaciente] NVARCHAR(100) NOT NULL;
+ALTER TABLE [dbo].[t_cm_paciente] 
+    ALTER COLUMN [NrPeso] FLOAT NOT NULL;
+ALTER TABLE [dbo].[t_cm_paciente] 
+    ALTER COLUMN [NrAltura] FLOAT NOT NULL;
+ALTER TABLE [dbo].[t_cm_paciente] 
+    ALTER COLUMN [NmGrupoSanguineo] NVARCHAR(10) NOT NULL;
+ALTER TABLE [dbo].[t_cm_paciente] 
+    ALTER COLUMN [FlSexoBiologico] CHAR(1) NOT NULL;
+ALTER TABLE [dbo].[t_cm_paciente] 
+    ALTER COLUMN [UsuarioCdUsuario] INT NOT NULL;
+
+--------------------------------------------------------
+--  Constraints for Table t_cm_paciente_plano_saude
+--------------------------------------------------------
+
+ALTER TABLE [dbo].[t_cm_paciente_plano_saude] 
+    ADD CONSTRAINT [PK_t_cm_paciente_plano_saude] PRIMARY KEY CLUSTERED ([PacienteId], [PlanoSaudeId]);
+
+ALTER TABLE [dbo].[t_cm_paciente_plano_saude] 
+    ALTER COLUMN [PlanoSaudeId] INT NOT NULL;
+ALTER TABLE [dbo].[t_cm_paciente_plano_saude] 
+    ALTER COLUMN [PacienteId] INT NOT NULL;
+ALTER TABLE [dbo].[t_cm_paciente_plano_saude] 
+    ALTER COLUMN [CdPlanoPaciente] NVARCHAR(50) NOT NULL;
+ALTER TABLE [dbo].[t_cm_paciente_plano_saude] 
+    ALTER COLUMN [NrCarteira] VARCHAR(20) NOT NULL;
+ALTER TABLE [dbo].[t_cm_paciente_plano_saude] 
+    ALTER COLUMN [DtInicio] DATE NOT NULL;
+ALTER TABLE [dbo].[t_cm_paciente_plano_saude] 
+    ALTER COLUMN [DtFim] DATE NOT NULL;
+
+--------------------------------------------------------
+--  Constraints for Table t_cm_plano_saude
+--------------------------------------------------------
+
+ALTER TABLE [dbo].[t_cm_plano_saude] 
+    ADD CONSTRAINT [PK_t_cm_plano_saude] PRIMARY KEY CLUSTERED ([CdPlanoSaude]);
+
+ALTER TABLE [dbo].[t_cm_plano_saude] 
+    ALTER COLUMN [CdPlanoSaude] INT NOT NULL;
+ALTER TABLE [dbo].[t_cm_plano_saude] 
+    ALTER COLUMN [DsRazaoSocial] NVARCHAR(100) NOT NULL;
+ALTER TABLE [dbo].[t_cm_plano_saude] 
+    ALTER COLUMN [NmFantasia] NVARCHAR(100) NOT NULL;
+ALTER TABLE [dbo].[t_cm_plano_saude] 
+    ALTER COLUMN [NrCnpj] VARCHAR(18) NOT NULL;
+ALTER TABLE [dbo].[t_cm_plano_saude] 
+    ALTER COLUMN [NmContato] NVARCHAR(100) NOT NULL;
+ALTER TABLE [dbo].[t_cm_plano_saude] 
+    ALTER COLUMN [NrTelefone] VARCHAR(15) NOT NULL;
+ALTER TABLE [dbo].[t_cm_plano_saude] 
+    ALTER COLUMN [DtCadastro] DATE NOT NULL;
+ALTER TABLE [dbo].[t_cm_plano_saude] 
+    ALTER COLUMN [FgAtivo] BIT NOT NULL;
+
+--------------------------------------------------------
+--  Constraints for Table t_cm_resultado_exame
+--------------------------------------------------------
+
+ALTER TABLE [dbo].[t_cm_resultado_exame] 
+    ADD CONSTRAINT [PK_t_cm_resultado_exame] PRIMARY KEY CLUSTERED ([CdResultado]);
+
+ALTER TABLE [dbo].[t_cm_resultado_exame] 
+    ALTER COLUMN [CdResultado] INT NOT NULL;
+ALTER TABLE [dbo].[t_cm_resultado_exame] 
+    ALTER COLUMN [DsResultado] NVARCHAR(255) NOT NULL;
+ALTER TABLE [dbo].[t_cm_resultado_exame] 
+    ALTER COLUMN [DsObservacoes] NVARCHAR(255) NOT NULL;
+ALTER TABLE [dbo].[t_cm_resultado_exame] 
+    ALTER COLUMN [VrResultado] FLOAT NOT NULL;
+ALTER TABLE [dbo].[t_cm_resultado_exame] 
+    ALTER COLUMN [NrGlobulosVermelhos] FLOAT NOT NULL;
+ALTER TABLE [dbo].[t_cm_resultado_exame] 
+    ALTER COLUMN [NrGlobulosBrancos] FLOAT NOT NULL;
+ALTER TABLE [dbo].[t_cm_resultado_exame] 
+    ALTER COLUMN [NrPlaquetas] FLOAT NOT NULL;
+ALTER TABLE [dbo].[t_cm_resultado_exame] 
+    ALTER COLUMN [NrHemoglobinaGlicada] FLOAT NOT NULL;
+ALTER TABLE [dbo].[t_cm_resultado_exame] 
+    ALTER COLUMN [NrColesterolTotal] FLOAT NOT NULL;
+ALTER TABLE [dbo].[t_cm_resultado_exame] 
+    ALTER COLUMN [NrTriglicerides] FLOAT NOT NULL;
+ALTER TABLE [dbo].[t_cm_resultado_exame] 
+    ALTER COLUMN [NrGlicose] FLOAT NOT NULL;
+ALTER TABLE [dbo].[t_cm_resultado_exame] 
+    ALTER COLUMN [DtRealizacao] DATE NOT NULL;
+ALTER TABLE [dbo].[t_cm_resultado_exame] 
+    ALTER COLUMN [TExameCdExame] INT NOT NULL;
+
+--------------------------------------------------------
+--  Foreign Key Constraints
+--------------------------------------------------------
+
+ALTER TABLE [dbo].[t_cm_agendamento_exame] 
+    ADD CONSTRAINT [FK_t_cm_agendamento_exame_t_cm_paciente_PacienteId] FOREIGN KEY ([PacienteId])
+    REFERENCES [dbo].[t_cm_paciente] ([CdPaciente]);
+
+ALTER TABLE [dbo].[t_cm_carteirinha] 
+    ADD CONSTRAINT [FK_t_cm_carteirinha_t_cm_paciente_PacienteCdPaciente] FOREIGN KEY ([PacienteCdPaciente])
+    REFERENCES [dbo].[t_cm_paciente] ([CdPaciente]);
+
+ALTER TABLE [dbo].[t_cm_exame] 
+    ADD CONSTRAINT [FK_t_cm_exame_t_cm_agendamento_exame_AgendamentoExameId] FOREIGN KEY ([AgendamentoExameId])
+    REFERENCES [dbo].[t_cm_agendamento_exame] ([CdAgendamento]);
+
+ALTER TABLE [dbo].[t_cm_login] 
+    ADD CONSTRAINT [FK_t_cm_login_t_cm_usuario_UsuarioId] FOREIGN KEY ([UsuarioId])
+    REFERENCES [dbo].[t_cm_usuario] ([CdUsuario]) ON DELETE CASCADE;
+
+ALTER TABLE [dbo].[t_cm_paciente] 
+    ADD CONSTRAINT [FK_t_cm_paciente_t_cm_usuario_UsuarioCdUsuario] FOREIGN KEY ([UsuarioCdUsuario])
+    REFERENCES [dbo].[t_cm_usuario] ([CdUsuario]) ON DELETE CASCADE;
+
+ALTER TABLE [dbo].[t_cm_paciente_plano_saude] 
+    ADD CONSTRAINT [FK_t_cm_paciente_plano_saude_t_cm_paciente_PacienteCdPaciente] FOREIGN KEY ([PacienteCdPaciente])
+    REFERENCES [dbo].[t_cm_paciente] ([CdPaciente]);
+
+ALTER TABLE [dbo].[t_cm_paciente_plano_saude] 
+    ADD CONSTRAINT [FK_t_cm_paciente_plano_saude_t_cm_paciente_PacienteId] FOREIGN KEY ([PacienteId])
+    REFERENCES [dbo].[t_cm_paciente] ([CdPaciente]) ON DELETE CASCADE;
+
+ALTER TABLE [dbo].[t_cm_paciente_plano_saude] 
+    ADD CONSTRAINT [FK_t_cm_paciente_plano_saude_t_cm_plano_saude_PlanoSaudeCdPlanoSaude] FOREIGN KEY ([PlanoSaudeCdPlanoSaude])
+    REFERENCES [dbo].[t_cm_plano_saude] ([CdPlanoSaude]);
+
+ALTER TABLE [dbo].[t_cm_paciente_plano_saude] 
+    ADD CONSTRAINT [FK_t_cm_paciente_plano_saude_t_cm_plano_saude_PlanoSaudeId] FOREIGN KEY ([PlanoSaudeId])
+    REFERENCES [dbo].[t_cm_plano_saude] ([CdPlanoSaude]) ON DELETE CASCADE;
+
+ALTER TABLE [dbo].[t_cm_resultado_exame] 
+    ADD CONSTRAINT [FK_t_cm_resultado_exame_t_cm_exame_TExameCdExame] FOREIGN KEY ([TExameCdExame])
+    REFERENCES [dbo].[t_cm_exame] ([CdExame]) ON DELETE CASCADE;

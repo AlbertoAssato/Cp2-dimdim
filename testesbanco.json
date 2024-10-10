@@ -1,0 +1,48 @@
+[
+    {
+        "CdUsuario": 1,
+        "NmUsuario": "João da Silva",
+        "DtNascimento": "1990-05-15T00:00:00",
+        "NrCpf": "123.456.789-00",
+        "NrRg": "MG-12.345.678",
+        "DsNacionalidade": "Brasileiro",
+        "NrTelefone": "(31) 98765-4321",
+        "DtCadastro": "2024-09-16T00:00:00",
+        "DsEstadoCivil": "Solteiro",
+        "DsProfissao": "Desenvolvedor",
+        "FgAtivo": 1
+    },
+    {
+        "CdUsuario": 2,
+        "NmUsuario": "Roberto Cardoso",
+        "DtNascimento": "1992-07-11T00:00:00",
+        "NrCpf": "321.980.657-11",
+        "NrRg": "MG-00.000.000",
+        "DsNacionalidade": "Brasileiro",
+        "NrTelefone": "(31) 98765-4321",
+        "DtCadastro": "2024-09-16T00:00:00",
+        "DsEstadoCivil": "Casado",
+        "DsProfissao": "Advogado",
+        "FgAtivo": 1
+    },
+    {
+        "CdCarteirinha": 1,
+        "NmPaciente": "João da Silva",
+        "NmPlanoSaude": "Plano Saúde Premium",
+        "NrCns": 123456789012345,
+        "NmEmpresa": "Empresa de Saúde XYZ",
+        "DsCarencia": "6 meses",
+        "DsAcomodacao": "Apartamento",
+        "DtNascimento": "1980-05-15T00:00:00Z"
+    },
+    {
+        "CdCarteirinha": 2,
+        "NmPaciente": "Roberto Cardoso",
+        "NmPlanoSaude": "Plano Saúde Diamond",
+        "NrCns": 987654321098765,
+        "NmEmpresa": "Empresa de Saúde XYZ",
+        "DsCarencia": "8 meses",
+        "DsAcomodacao": "Casa",
+        "DtNascimento": "1992-07-11T00:00:00Z"
+    }
+]
